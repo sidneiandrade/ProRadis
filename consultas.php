@@ -23,22 +23,16 @@ include 'header.php';
 
         <div class="row">
 
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <div class="card mb-grid">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <div class="card-header-title">Novos Pacientes</div>
                     </div>
                     <div class="card-body collapse show">
                         <div class="col-lg-12 text-center">
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Nome do Paciente" aria-label="Nome do Paciente" aria-describedby="button-addon2">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-primary" type="button" id="button-addon2">Buscar</button>
-                                </div>
-                            </div>
                             <ul class="list-group">
                             <?php 
-                                $sql = $pdo->prepare("SELECT * FROM pacientes WHERE pac_con_id <= 0");
+                                $sql = $pdo->prepare("SELECT * FROM pacientes WHERE pac_con_id <= 0 ORDER BY pac_id DESC");
                                 $sql->execute();
                                 $count = $sql->rowCount();
 
@@ -50,7 +44,7 @@ include 'header.php';
                                 <li class="list-group-item">
                                     <div class="row text-center">
                                         <div class="col-md-4">
-                                            <img src="<?php echo $values['pac_foto'] ?>" alt="<?php echo $values['pac_nome'] ?>" class="img-fluid rounded-circle">
+                                            <img src="<?php echo $values['pac_foto'] ?>" alt="<?php echo $values['pac_nome'] ?>" class="img-fluid rounded-circle" width="90">
                                         </div>
                                         <div class="col-md-8">
                                             <h5 class="mb-0"><?php echo $values['pac_nome'] ?></h5>
@@ -81,7 +75,7 @@ include 'header.php';
                         <div class="col-lg-12 text-center">
                             <ul class="list-group">
                             <?php 
-                                $sql = $pdo->prepare("SELECT * FROM consultas INNER JOIN pacientes on (pac_id = con_pac_id)");
+                                $sql = $pdo->prepare("SELECT * FROM consultas INNER JOIN pacientes on (pac_id = con_pac_id) ORDER BY con_id DESC");
                                 $sql->execute();
                                 $count = $sql->rowCount();
                                 
@@ -112,12 +106,12 @@ include 'header.php';
                     </div>
                 </div>
             </div>
-
-            <div class="col-lg-8">
+           
+            <div class="col-lg-9">
                 <form id="form" method="post" enctype="multipart/form-data">
                     <div id="painelConsulta" class="card mb-grid hide">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <div class="card-header-title">Informações</div>
+                            <div class="card-header-title">Informações da Consulta</div>
                         </div>
                         <div class="card-body collapse show">
                             <div class="row">
@@ -126,14 +120,14 @@ include 'header.php';
                                     <h4 id="nomePaciente" class="alert-heading"></h4>
                                     <p id="dadosPaciente"></p>
                                     <hr>
-                                    <p class="mb-0">Antes de salvar confirme todas as informações da Consulta.</p>
+                                    <p class="mb-0">Prontuário Médico</p>
                                 </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <input type="hidden" name="con_id" value="">
                                         <input type="hidden" id="con_pac_id" name="con_pac_id" value="">
-                                        <div id="editor" class="dadosConsulta"><div class="dadosConsulta"></div></div>
+                                        <div id="editor"></div>
                                         <input type="hidden" id="con_descricao" name="con_descricao">
                                     </div>
                                     <div class="text-center">
@@ -161,6 +155,7 @@ include 'header.php';
 
     $(".btnConsulta").click(function(e){
         e.preventDefault();
+        Notiflix.Loading.Pulse('Carregando...');
         $("#con_pac_id").val($(this).data('id'))
         let pacID = $("#con_pac_id").val();
         $(".dadosConsulta").html("");
@@ -188,27 +183,34 @@ include 'header.php';
         Notiflix.Loading.Pulse('Carregando...');
 
         var texto = $('#editor').summernote('code');
-        $('#con_descricao').val(texto);
 
-        $.ajax({
-            type: "POST",
-            url: "system/_consulta.php",
-            data: new FormData($('#form')[0]),
-            processData: false,
-            contentType: false,
-            success: function(data) {
-                
-                if (data.acao == 'salvo') {
-                    Notiflix.Loading.Remove();
-                    Notiflix.Notify.Success('Consulta Salva com Sucesso!');
-                    setTimeout(function(){ location.reload(); }, 2000);
+        if(texto == ""){
+            Notiflix.Loading.Remove();
+            Notiflix.Notify.Failure('Preencher Prontuário!');
+        } else {
+            $('#con_descricao').val(texto);
+            $.ajax({
+                type: "POST",
+                url: "system/_consulta.php",
+                data: new FormData($('#form')[0]),
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    
+                    if (data.acao == 'salvo') {
+                        Notiflix.Loading.Remove();
+                        Notiflix.Notify.Success('Consulta Salva com Sucesso!');
+                        setTimeout(function(){ location.reload(); }, 2000);
 
-                } else {
-                    Notiflix.Loading.Remove();
-                    Notiflix.Notify.Failure('Erro!');
+                    } else {
+                        Notiflix.Loading.Remove();
+                        Notiflix.Notify.Failure('Erro!');
+                    }
                 }
-            }
-        });
+            });
+        }
+
+        
     });
 
     $(".visConsulta").click(function(e){
@@ -216,8 +218,6 @@ include 'header.php';
         let conID = $(this).data('consulta');
         $("#con_pac_id").val($(this).data('id'));
         Notiflix.Loading.Pulse('Carregando...');
-
-
 
         $.ajax({
             type: "POST",
@@ -230,7 +230,7 @@ include 'header.php';
                 Notiflix.Loading.Remove();
 
                 $("#painelConsulta").removeClass('hide');
-                $(".dadosConsulta").html(data.dados);
+                $("#editor").summernote('code', data.dados);
                 $("#acao").val('atualizar');
                 $("#btnSalvar").html("Atualizar Consulta");
 

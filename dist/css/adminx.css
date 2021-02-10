@@ -13428,3 +13428,9 @@ div.table-responsive>div.dataTables_wrapper>div.row>div[class^=col-]:last-child 
     display: none;
 }
 
+.bg{
+    background: url("../img/bg-consulta.svg") no-repeat bottom;
+    background-size: 50%;
+    width: 100%;
+    background-position-x: right;
+}

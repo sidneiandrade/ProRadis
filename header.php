@@ -16,7 +16,7 @@ $id = $_SESSION['id'];
     <html lang="pt-br">
 
     <head>
-        <link rel="icon" type="image/png" sizes="16x16" href="">
+        <link rel="icon" type="image/png" sizes="16x16" href="./dist/img/favicon.png">
         <title>Administração</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -31,11 +31,11 @@ $id = $_SESSION['id'];
 
     <body>
 
-        <div class="adminx-container">
+        <div class="adminx-container bg">
             <nav class="navbar navbar-expand justify-content-between fixed-top">
                 <div class="navbar-brand m-0 pl-0 h1 d-none d-md-block">
                     <a href="<?php echo $baseUrl ?>dashboard" style="text-decoration: none;">
-                        <img src="./dist/img/logo-proradis-1536x429.png" class="img-fluid" style="max-height: 55px;">
+                        <img src="./dist/img/logo-proradis-color.png" class="img-fluid p-2" style="max-height: 55px;">
                     </a>
                     
                 </div>

@@ -1,4 +1,9 @@
 <nav class="navbar fixed-bottom navbar-dark bg-dark">
+    <div class="col-lg-12 text-right">
+        <a class="navbar-brand" href="https://proradis.com.br" target="_blank" style="font-size: 8px">
+            <img src="./dist/img/logo-proradis-branco.png" class="img-fluid" alt="PRORADIS" width="10%">
+        </a>
+    </div>
 </nav>
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>

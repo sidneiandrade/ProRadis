@@ -84,7 +84,7 @@ include 'header.php';
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="text-center">
-                                        <button id="btnSalvar" class="btn btn-primary"><i class="fas fa-save"></i> Salvar Paciente</button>
+                                        <button id="btnSalvar" class="btn btn-primary">Salvar Dados</button>
                                     </div>
                                 </div>
                             </div>
@@ -105,6 +105,7 @@ include 'header.php';
 <script>
     $('#btnSalvar').on('click', function (event) {
         event.preventDefault();
+        
         $.ajax({
             type: "POST",
             url: "system/_paciente.php",
@@ -117,6 +118,7 @@ include 'header.php';
                 if (data.acao == 'salvo') {
                     Notiflix.Loading.Remove();
                     Notiflix.Notify.Success('Paciente Salvo com Sucesso!');
+                    setTimeout(function(){ location.reload(); },2000);
                 } else {
                     Notiflix.Loading.Remove();
                     Notiflix.Notify.Failure('Erro!');

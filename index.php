@@ -24,7 +24,7 @@ $_SESSION['caminho'] = ABSPATH;
 <html lang="pt-br">
 
 <head>
-  <link rel="icon" type="image/png" sizes="16x16" href="../assets/img/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./dist/img/favicon.png">
   <title>Adminstração - PRORADIS</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -33,14 +33,11 @@ $_SESSION['caminho'] = ABSPATH;
 </head>
 
 <body>
-  <div class="adminx-container d-flex justify-content-center align-items-center">
+  <div class="adminx-container d-flex justify-content-center align-items-center bg">
     <div class="page-login">
-      <div class="text-center">
-      <img src="./dist/img/logo-proradis-1536x429.png" class="img-fluid p-4" alt="PRORADIS">
-        <!-- <h2 class="display-5">Painel de Controle</h2> -->
-      </div>
       <div class="card mb-0">
         <div class="card-body">
+          <img src="./dist/img/logo-proradis-color.png" class="img-fluid p-4" alt="PRORADIS">
           <form id="loginAdm" method="post">
             <div class="form-group">
               <label for="usuario" class="form-label">Usuario</label>
@@ -74,7 +71,7 @@ $_SESSION['caminho'] = ABSPATH;
 
 $("#loginAdm").submit(function(e) {
   e.preventDefault();
-  
+  Notiflix.Loading.Pulse('Carregando...');
   $.ajax({
     type: "POST",
     url: "./system/login.php",
